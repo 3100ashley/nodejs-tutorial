@@ -66,15 +66,14 @@ app.get("/api/customers/:id", async (req, res) => {
 });
 
 app.put("/api/customers/:id", async (req, res) => {
-  try{
-    const customerID = req.params.id
-    const result = await Customer.replaceOne({_id: customerID}, req.body);
-    res.json({updatedCount: result.modifiedCount})
-  }catch(e){
-    res.status(500).json({error: "something went wrong"})
+  try {
+    const customerID = req.params.id;
+    const result = await Customer.replaceOne({ _id: customerID }, req.body);
+    res.json({ updatedCount: result.modifiedCount });
+  } catch (e) {
+    res.status(500).json({ error: "something went wrong" });
   }
-
-})
+});
 
 app.post("/", (req, res) => {
   res.send("welcome!");
@@ -91,6 +90,15 @@ app.post("/api/customers", async (req, res) => {
   }
 });
 
+app.delete("/api/customers/:id", async (res, res) => {
+  try {
+    const customerID = req.params.id;
+    const result = await Customer.deleteOne({ _id: customerID });
+    res.json({ deletedCount: result.deletedCount });
+  } catch (e) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
 const start = async () => {
   try {
     await mongoose.connect(CONNECTION);
