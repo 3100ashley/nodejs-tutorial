@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Customer = require('./models/customer')
 
 const app = express();
 mongoose.set("strictQuery", false);
@@ -13,6 +14,8 @@ if(process.env.NODE_ENV !== 'production'){
 
 const PORT = process.env.PORT || 3000;
 const CONNECTION = process.env.CONNECTION
+
+
 const customers = [
   {
     name: "Ashley",
@@ -28,16 +31,27 @@ const customers = [
   },
 ];
 
+const customer = new Customer({
+    name: 'Ashley',
+    industry: 'technology'
+})
+
 app.get("/", (req, res) => {
-  res.send("hello home page");
+  res.send(customer);
 });
 
-app.get("/api/customers", (req, res) => {
-  res.send({ customers: customers });
+app.get("/api/customers", async (req, res) => {
+  try{
+    const result = await Customer.find()
+    res.send({ customers: result });
+  }catch(e) {
+    res.status(500).json({error: e.message})
+  }
+  
 });
 
 app.post("/", (req, res) => {
-  res.send("this is a post request");
+  res.send("welcome!");
 });
 
 app.post("/api/customers", (req, res) => {
