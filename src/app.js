@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 app.get("/api/customers", async (req, res) => {
   try{
     const result = await Customer.find()
-    res.send({ customers: result });
+    res.json({ customers: result });
   }catch(e) {
     res.status(500).json({error: e.message})
   }
@@ -54,9 +54,19 @@ app.post("/", (req, res) => {
   res.send("welcome!");
 });
 
-app.post("/api/customers", (req, res) => {
+app.post("/api/customers", async (req, res) => {
   console.log(req.body);
-  res.send(req.body);
+  const customer = new Customer(req.body);
+  try {
+    await customer.save();
+    res.status(201).json({customer});
+  }catch(e){
+    res.status(400).json({error: e.message})
+
+  }
+  
+ 
+ 
 });
 
 const start = async () => {
