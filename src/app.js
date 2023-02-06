@@ -65,6 +65,17 @@ app.get("/api/customers/:id", async (req, res) => {
   }
 });
 
+app.put("/api/customers/:id", async (req, res) => {
+  try{
+    const customerID = req.params.id
+    const result = await Customer.replaceOne({_id: customerID}, req.body);
+    res.json({updatedCount: result.modifiedCount})
+  }catch(e){
+    res.status(500).json({error: "something went wrong"})
+  }
+
+})
+
 app.post("/", (req, res) => {
   res.send("welcome!");
 });
